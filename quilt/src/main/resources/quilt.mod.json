@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "redstone_backport",
+    "version": "${version}",
+    "metadata": {
+      "name": "Redstone Backport",
+      "description": "Early-release mod for backporting redstone additions from later Minecraft versions to 1.20.1.",
+      "contributors": {
+        "squinchmods": "Owner"
+      },
+      "contact": {
+        "homepage": "https://github.com/squinchmods/squinchmods",
+        "sources": "https://github.com/squinchmods/squinchmods"
+      },
+      "icon": "icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": "com.squinchmods.redstonebackport.RedstoneBackportQuilt",
+      "client_init": "com.squinchmods.redstonebackport.RedstoneBackportQuiltClient"
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "versions": ">=${quilt_loader_version}"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": ">=${quilted_fabric_api_version}"
+      },
+      {
+        "id": "minecraft",
+        "versions": "~${minecraft_version}"
+      },
+      {
+        "id": "java",
+        "versions": ">=17"
+      }
+    ]
+  }
+}

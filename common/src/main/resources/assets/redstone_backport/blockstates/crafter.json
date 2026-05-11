@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "crafting=false,facing=down,triggered=false": { "model": "redstone_backport:block/crafter", "x": 90 },
+    "crafting=false,facing=down,triggered=true": { "model": "redstone_backport:block/crafter_triggered", "x": 90 },
+    "crafting=true,facing=down,triggered=false": { "model": "redstone_backport:block/crafter_crafting", "x": 90 },
+    "crafting=true,facing=down,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered", "x": 90 },
+
+    "crafting=false,facing=up,triggered=false": { "model": "redstone_backport:block/crafter", "x": 270 },
+    "crafting=false,facing=up,triggered=true": { "model": "redstone_backport:block/crafter_triggered", "x": 270 },
+    "crafting=true,facing=up,triggered=false": { "model": "redstone_backport:block/crafter_crafting", "x": 270 },
+    "crafting=true,facing=up,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered", "x": 270 },
+
+    "crafting=false,facing=north,triggered=false": { "model": "redstone_backport:block/crafter" },
+    "crafting=false,facing=north,triggered=true": { "model": "redstone_backport:block/crafter_triggered" },
+    "crafting=true,facing=north,triggered=false": { "model": "redstone_backport:block/crafter_crafting" },
+    "crafting=true,facing=north,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered" },
+
+    "crafting=false,facing=south,triggered=false": { "model": "redstone_backport:block/crafter", "y": 180 },
+    "crafting=false,facing=south,triggered=true": { "model": "redstone_backport:block/crafter_triggered", "y": 180 },
+    "crafting=true,facing=south,triggered=false": { "model": "redstone_backport:block/crafter_crafting", "y": 180 },
+    "crafting=true,facing=south,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered", "y": 180 },
+
+    "crafting=false,facing=west,triggered=false": { "model": "redstone_backport:block/crafter", "y": 270 },
+    "crafting=false,facing=west,triggered=true": { "model": "redstone_backport:block/crafter_triggered", "y": 270 },
+    "crafting=true,facing=west,triggered=false": { "model": "redstone_backport:block/crafter_crafting", "y": 270 },
+    "crafting=true,facing=west,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered", "y": 270 },
+
+    "crafting=false,facing=east,triggered=false": { "model": "redstone_backport:block/crafter", "y": 90 },
+    "crafting=false,facing=east,triggered=true": { "model": "redstone_backport:block/crafter_triggered", "y": 90 },
+    "crafting=true,facing=east,triggered=false": { "model": "redstone_backport:block/crafter_crafting", "y": 90 },
+    "crafting=true,facing=east,triggered=true": { "model": "redstone_backport:block/crafter_crafting_triggered", "y": 90 }
+  }
+}

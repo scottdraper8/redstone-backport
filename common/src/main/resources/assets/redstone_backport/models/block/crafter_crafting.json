@@ -1,0 +1,9 @@
+{
+  "parent": "redstone_backport:block/crafter_triggered",
+  "textures": {
+    "top": "redstone_backport:block/crafter_top_crafting",
+    "north": "redstone_backport:block/crafter_north_crafting",
+    "east": "redstone_backport:block/crafter_east_crafting",
+    "west": "redstone_backport:block/crafter_west_crafting"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "redstone_backport",
+  "version": "${version}",
+  "name": "Redstone Backport",
+  "description": "Early-release mod for backporting redstone additions from later Minecraft versions to 1.20.1.",
+  "authors": [
+    "squinchmods"
+  ],
+  "contact": {
+    "homepage": "https://github.com/squinchmods/squinchmods",
+    "sources": "https://github.com/squinchmods/squinchmods"
+  },
+  "license": "CC-BY-NC-ND-4.0",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.squinchmods.redstonebackport.RedstoneBackportFabric"
+    ],
+    "client": [
+      "com.squinchmods.redstonebackport.RedstoneBackportFabricClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}

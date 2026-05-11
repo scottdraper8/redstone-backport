@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: delarosaplay_crafter
+Specification-Vendor: delarosaplay
+Specification-Version: 1
+Implementation-Title: crafter_forge_1_20_1
+Implementation-Version: 1.0.0
+Implementation-Vendor: delarosaplay
+Implementation-Timestamp: 2026-03-07T19:03:40-0500
+
