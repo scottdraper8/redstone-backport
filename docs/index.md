@@ -22,17 +22,17 @@ this mod is meant to absorb over time.
 
 (version-matrix)=
 
-## Version matrix
+## Version Matrix
 
-Each **Minecraft** row lists redstone-relevant changes in that release. **Backported?** is one value
-for the whole row—**Yes** (fully covered), **Partial** (some items covered), or **Planned** (not in
-the mod yet)—reflecting everything named in **Redstone Changes** for that version.
+Each **Minecraft** row lists redstone-relevant changes in that release. The **Backported?** column
+describe how much of that row’s **Redstone Changes** are planned to be backported or already
+implemented. Possible values are *Not Planned*, *Planned*, *Implemented*, and *Partial*
+(indicating that only some features from that update are implemented or planned).
 
 :::{note}
-**Planned** rows can still ship later; this reflects the mod **today**. Experimental or snapshot-only
-mechanics outside stable gameplay are called out where relevant.
+Behavior is delivered with **mixins** and **loader-specific** hooks to match newer vanilla as closely
+as possible, as opposed to other solutions like Forge Events that don't provide full parity.
 :::
-
 <!-- markdownlint-disable MD004 MD013 MD032 -->
 <!-- MyST `list-table` rows start with `*`; nested bullets use `-`. Long cell lines are not practical
      to hard-wrap without breaking the directive. Line length is enforced elsewhere in this file. -->
@@ -53,10 +53,11 @@ mechanics outside stable gameplay are called out where relevant.
 * - **1.18**
   - - **Simulation distance** — separate from render distance; blocks, fluids, and entities outside it stop simulating, affecting farms and loaded-chunk machines.
   - |
-    **Planned**
+    **Not Planned**
 
     *(already implemented in 1.20.1, the current alpha backport target)*
-  - **—**
+  - Attempting to write a distinct simulation engine in pre-1.18 versions would be extremely
+    invasive and introduce extensive incompatibilities or unexpected behaviors with other mods.
 * - **1.19**
   - - **Sculk / vibration** — sculk sensors and the vibration system (wool occlusion, categories, wireless-style detection).
   - |
@@ -123,8 +124,8 @@ mechanics outside stable gameplay are called out where relevant.
 * - **1.21.5**
   - - **Random ticks in simulation** — blocks in simulation distance (including some pearl-loaded cases) can receive random ticks; affects vanilla random-tick farms.
     - **Piston audio** — blocks broken by pistons play break sounds (feedback only).
-  - **Planned**
-  - **—**
+  - **Partially planned**
+  - Piston audio update is planned. Random ticks in simulation distance update is *not* planned for versions without a distinct simulation engine (pre-1.18). For version 1.18 and above, it will be included as a toggleable game rule (off by default).
 * - **1.21.6**
   - - **Dispenser + shears** — can cut leashes on entities in front; related vibration tweaks.
   - **Planned**
@@ -141,12 +142,6 @@ mechanics outside stable gameplay are called out where relevant.
 :::
 
 <!-- markdownlint-enable MD004 MD013 MD032 -->
-
-### What “backported” means here
-
-**Yes** / **Partial** / **Planned** describe how much of that row’s **Redstone Changes** are
-implemented on **1.20.1** today. Behavior is delivered with **mixins** and **loader-specific** hooks
-so **1.20.1** can closely match newer vanilla where this project ships a feature.
 
 ## Documentation
 
