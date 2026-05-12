@@ -30,6 +30,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "furo.sphinxext",
+    "sphinxcontrib.mermaid",
 ]
 
 myst_enable_extensions = [

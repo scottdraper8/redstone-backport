@@ -17,6 +17,7 @@ dependencies = [
     "sphinx-design==0.7.0; python_full_version >= '3.11'",
     "sphinx-copybutton==0.5.2",
     "linkify-it-py==2.1.0",
+    "sphinxcontrib-mermaid==1.0.0",
 ]
 
 [project.scripts]
