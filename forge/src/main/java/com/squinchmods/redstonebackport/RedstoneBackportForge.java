@@ -1,8 +1,10 @@
 package com.squinchmods.redstonebackport;
 
+import com.mojang.serialization.Codec;
 import com.squinchmods.redstonebackport.block.CrafterBlock;
 import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.client.CrafterScreen;
+import com.squinchmods.redstonebackport.loot.WitchRedstoneModifier;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -27,6 +29,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -53,6 +56,10 @@ public class RedstoneBackportForge {
       DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RedstoneBackport.MOD_ID);
   public static final DeferredRegister<MenuType<?>> MENUS =
       DeferredRegister.create(ForgeRegistries.MENU_TYPES, RedstoneBackport.MOD_ID);
+  public static final DeferredRegister<Codec<? extends IGlobalLootModifier>>
+      LOOT_MODIFIER_SERIALIZERS =
+          DeferredRegister.create(
+              ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, RedstoneBackport.MOD_ID);
 
   public static final RegistryObject<Block> CRAFTER_BLOCK =
       BLOCKS.register(
@@ -74,6 +81,9 @@ public class RedstoneBackportForge {
               BlockEntityType.Builder.of(CrafterBlockEntity::new, CRAFTER_BLOCK.get()).build(null));
   public static final RegistryObject<MenuType<CrafterMenu>> CRAFTER_MENU =
       MENUS.register("crafter", () -> IForgeMenuType.create(CrafterMenu::new));
+
+  public static final RegistryObject<Codec<WitchRedstoneModifier>> WITCH_REDSTONE_MODIFIER =
+      LOOT_MODIFIER_SERIALIZERS.register("witch_redstone", WitchRedstoneModifier.CODEC);
 
   static {
     Platform.CRAFTER_BLOCK_ENTITY = CRAFTER_BLOCK_ENTITY;
@@ -112,6 +122,7 @@ public class RedstoneBackportForge {
     ITEMS.register(modEventBus);
     BLOCK_ENTITY_TYPES.register(modEventBus);
     MENUS.register(modEventBus);
+    LOOT_MODIFIER_SERIALIZERS.register(modEventBus);
 
     MinecraftForge.EVENT_BUS.register(this);
     modEventBus.addListener(this::addCreative);

@@ -5,6 +5,7 @@ import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
 import javax.annotation.Nullable;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
@@ -24,17 +26,43 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
 public class RedstoneBackportQuilt implements ModInitializer {
+  private void modifyLootTables() {
+    LootTableEvents.MODIFY.register(
+        (resourceManager, lootManager, id, tableBuilder, source) -> {
+          if (source.isBuiltin()
+              && id.equals(new ResourceLocation("minecraft", "entities/witch"))) {
+            LootPool.Builder poolBuilder =
+                LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
+                    .add(LootItem.lootTableItem(Items.REDSTONE))
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 8.0F)))
+                    .apply(LootingEnchantFunction.lootingMultiplier(ConstantValue.exactly(1.0F)));
+
+            tableBuilder.withPool(poolBuilder);
+          }
+        });
+  }
+
   @Override
   public void onInitialize(ModContainer mod) {
+    modifyLootTables();
+
     Block block =
         Registry.register(
             BuiltInRegistries.BLOCK,
