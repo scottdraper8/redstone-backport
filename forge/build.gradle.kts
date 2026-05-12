@@ -37,6 +37,11 @@ legacyForge {
         minecraftVersion = project.property("minecraft_version") as String
     }
     runs {
+        configureEach {
+            systemProperty("mixin.env.remapRefMap", "true")
+            systemProperty("mixin.env.refMapRemappingFile",
+                "${project.layout.buildDirectory.get()}/moddev/obfToNames.zip")
+        }
         register("client") {
             client()
             ideName = "Forge Client"
@@ -65,6 +70,11 @@ tasks {
             expand(expandProps)
         }
     }
+    withType<Jar> {
+        manifest {
+            attributes("MixinConfigs" to "redstone_backport.mixins.json")
+        }
+    }
 }
 
 repositories {
@@ -84,10 +94,17 @@ configurations {
     }
 }
 
+mixin {
+    add(sourceSets.main.get(), "redstone_backport.refmap.json")
+    config("redstone_backport.mixins.json")
+}
+
 dependencies {
     implementation(project(":common"))
     compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
     errorprone("com.google.errorprone:error_prone_core:2.39.0")
     errorprone("com.uber.nullaway:nullaway:0.12.7")

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.squinchmods.redstonebackport.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MinecraftServerMixin",
+    "ServerLevelMixin",
+    "ServerChunkCacheMixin",
+    "LevelEntityFreezeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

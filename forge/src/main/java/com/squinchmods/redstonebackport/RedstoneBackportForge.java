@@ -6,6 +6,7 @@ import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.client.CrafterScreen;
 import com.squinchmods.redstonebackport.loot.WitchRedstoneModifier;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
+import com.squinchmods.redstonebackport.tick.TickCommand;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,6 +34,7 @@ import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -126,6 +128,11 @@ public class RedstoneBackportForge {
 
     MinecraftForge.EVENT_BUS.register(this);
     modEventBus.addListener(this::addCreative);
+    MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+  }
+
+  private void registerCommands(RegisterCommandsEvent event) {
+    TickCommand.register(event.getDispatcher());
   }
 
   private void addCreative(BuildCreativeModeTabContentsEvent event) {

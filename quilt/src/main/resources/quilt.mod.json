@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "mixin": "redstone_backport.mixins.json",
   "quilt_loader": {
     "group": "${group}",
     "id": "redstone_backport",

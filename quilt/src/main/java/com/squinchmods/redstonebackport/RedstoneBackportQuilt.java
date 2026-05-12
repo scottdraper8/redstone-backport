@@ -3,7 +3,9 @@ package com.squinchmods.redstonebackport;
 import com.squinchmods.redstonebackport.block.CrafterBlock;
 import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
+import com.squinchmods.redstonebackport.tick.TickCommand;
 import javax.annotation.Nullable;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -132,6 +134,9 @@ public class RedstoneBackportQuilt implements ModInitializer {
             content -> {
               content.accept(item);
             });
+
+    CommandRegistrationCallback.EVENT.register(
+        (dispatcher, registryAccess, environment) -> TickCommand.register(dispatcher));
   }
 
   private static ItemStack insertIntoContainer(
