@@ -114,7 +114,6 @@ html_theme_options = {
         "color-sidebar-search-foreground": "#282a36",
         "color-sidebar-search-text": "#282a36",
         "color-sidebar-search-icon": "#6272a4",
-        "content-width": "1000px",
     },
     "dark_css_variables": {
         "color-background-primary": "#282a36",
@@ -143,7 +142,6 @@ html_theme_options = {
         "color-sidebar-search-foreground": "#f8f8f2",
         "color-sidebar-search-text": "#f8f8f2",
         "color-sidebar-search-icon": "#bd93f9",
-        "content-width": "1000px",
     },
     "sidebar_hide_name": False,
     "navigation_with_keys": True,
