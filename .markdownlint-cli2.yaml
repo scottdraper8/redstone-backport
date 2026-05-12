@@ -1,0 +1,14 @@
+# <https://github.com/DavidAnson/markdownlint-cli2>
+# MD013 sub-options limit noise where hard wrapping hurts readability (tables, headings,
+# fenced code) without turning the rule off for body text.
+config:
+  default: true
+  MD004:
+    style: dash
+  MD013:
+    code_blocks: false
+    headings: false
+    line_length: 100
+    tables: false
+  MD060:
+    style: aligned

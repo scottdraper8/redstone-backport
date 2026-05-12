@@ -31,5 +31,7 @@ run/
 # Misc
 *.launch
 .architectury-transformer
+.venv/
+.venv-docs/
 gradle_client_output.txt
 gradle_server_output.txt

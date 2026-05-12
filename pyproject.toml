@@ -1,0 +1,27 @@
+[project]
+name = "redstone-backport"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "redstone-backport-docs",
+]
+
+# Keep in sync with `docs/pyproject.toml` `[dependency-groups].dev`.
+[dependency-groups]
+dev = [
+    "interrogate==1.7.0",
+    "mypy==2.1.0",
+    "ruff==0.15.12",
+    "vulture==2.16",
+]
+
+# Install the docs workspace member (and its console scripts such as `build-docs`) on `uv sync`.
+[tool.uv.sources]
+redstone-backport-docs = { workspace = true }
+
+[tool.uv]
+default-groups = ["dev"]
+package = false
+
+[tool.uv.workspace]
+members = ["docs"]

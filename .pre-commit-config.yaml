@@ -1,25 +1,86 @@
+# Pre-commit for the Redstone Backport mod repository (submodule / standalone clone).
+# Install: pre-commit install  (from this directory)
+
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-    -   id: check-added-large-files
-        args: ['--maxkb=102400']
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-merge-conflict
-    -   id: check-case-conflict
-    -   id: mixed-line-ending
-        args: ['--fix=lf']
-    -   id: check-yaml
-    -   id: check-toml
-        exclude: /META-INF/mods\.toml$
-    -   id: check-json
+      - id: check-added-large-files
+        args: ["--maxkb=102400"]
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+        exclude: (?i)\.mf$
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+        exclude: (?i)\.mf$
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-ast
+        files: \.py$
+      - id: debug-statements
+        files: \.py$
 
--   repo: local
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
     hooks:
-    -   id: minecraft-mod-gradle-check
-        name: minecraft mod Gradle checks
-        entry: ./gradlew --no-daemon spotlessCheck compileJava compileTestJava
-        language: system
+      - id: ruff-format
+        files: ^docs/.*\.pyi?$
+      - id: ruff-check
+        files: ^docs/.*\.pyi?$
+        args: [--fix]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.1.0
+    hooks:
+      - id: mypy
+        name: mypy (docs package)
+        args: [--config-file=docs/pyproject.toml]
+        files: ^docs/redstone_backport_docs/.*\.py$
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.25
+    hooks:
+      - id: validate-pyproject
+        files: .*pyproject\.toml$
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.2
+    hooks:
+      - id: codespell
+        files: ^docs/
+        exclude: ^docs/(_build|\.venv)/
+        additional_dependencies: [tomli]
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.22.1
+    hooks:
+      - id: markdownlint-cli2
+        name: markdownlint-cli2 (docs)
+        args: [--config, .markdownlint-cli2.yaml]
+        files: ^docs/.*\.md$
+        exclude: ^docs/(_build|\.venv)/
+
+  - repo: local
+    hooks:
+      - id: vulture-docs-package
+        name: vulture (docs package)
+        language: python
+        additional_dependencies: [vulture==2.16]
         pass_filenames: false
-        files: \.(java|json|gradle|kts|properties)$
+        files: ^docs/.*\.py$
+        entry: vulture --min-confidence 80 docs/redstone_backport_docs
+      - id: interrogate-docs-package
+        name: interrogate (docs package)
+        language: python
+        additional_dependencies: [interrogate==1.7.0]
+        pass_filenames: false
+        files: ^docs/redstone_backport_docs/.*\.py$
+        entry: interrogate -c docs/pyproject.toml docs/redstone_backport_docs
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
