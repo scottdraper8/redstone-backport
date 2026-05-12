@@ -28,6 +28,9 @@ sourceSets {
     }
 }
 
+val mixinRefMapRemappingFile =
+    layout.buildDirectory.get().asFile.resolve("moddev/obfToNames.zip").absolutePath.replace('\\', '/')
+
 legacyForge {
     enable {
         forgeVersion = "${project.property("minecraft_version")}-${project.property("forge_version")}"
@@ -39,8 +42,7 @@ legacyForge {
     runs {
         configureEach {
             systemProperty("mixin.env.remapRefMap", "true")
-            systemProperty("mixin.env.refMapRemappingFile",
-                "${project.layout.buildDirectory.get()}/moddev/obfToNames.zip")
+            systemProperty("mixin.env.refMapRemappingFile", mixinRefMapRemappingFile)
         }
         register("client") {
             client()
@@ -72,7 +74,7 @@ tasks {
     }
     withType<Jar> {
         manifest {
-            attributes("MixinConfigs" to "redstone_backport.mixins.json")
+            attributes("MixinConfigs" to "redstone_backport.mixins.json,redstone_backport.client.mixins.json")
         }
     }
 }
@@ -97,6 +99,7 @@ configurations {
 mixin {
     add(sourceSets.main.get(), "redstone_backport.refmap.json")
     config("redstone_backport.mixins.json")
+    config("redstone_backport.client.mixins.json")
 }
 
 dependencies {

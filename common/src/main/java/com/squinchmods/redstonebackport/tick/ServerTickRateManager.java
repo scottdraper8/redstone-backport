@@ -1,19 +1,18 @@
 package com.squinchmods.redstonebackport.tick;
 
+import com.squinchmods.redstonebackport.Platform;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.TimeUtil;
-
-// Uses TickRateManagerAccess duck interface (applied via mixin on MinecraftServer) for methods
-// that don't exist in vanilla 1.20.1.
 
 /**
  * Server-specific tick rate manager handling sprinting, stepping, and client synchronization.
  * Faithful replica of {@code net.minecraft.server.ServerTickRateManager} from 1.20.3+.
  *
- * <p>Client-side synchronization packets (ClientboundTickingStatePacket,
- * ClientboundTickingStepPacket) are omitted because 1.20.1 clients do not recognize them. The
- * server-side behavioral parity (freeze, step, sprint, rate) is fully preserved.
+ * <p>Client sync uses custom S2C channels via {@link Platform.TickStateBroadcaster} rather than
+ * vanilla 1.20.3+ packet types (which stock 1.20.1 clients would reject). Each loader provides its
+ * own broadcaster implementation.
  */
 public class ServerTickRateManager extends TickRateManager {
   private long remainingSprintTicks = 0L;
@@ -34,6 +33,7 @@ public class ServerTickRateManager extends TickRateManager {
   @Override
   public void setFrozen(boolean bl) {
     super.setFrozen(bl);
+    broadcastState();
   }
 
   public boolean stepGameIfPaused(int i) {
@@ -41,6 +41,7 @@ public class ServerTickRateManager extends TickRateManager {
       return false;
     } else {
       this.frozenTicksToRun = i;
+      broadcastStep();
       return true;
     }
   }
@@ -48,6 +49,7 @@ public class ServerTickRateManager extends TickRateManager {
   public boolean stopStepping() {
     if (this.frozenTicksToRun > 0) {
       this.frozenTicksToRun = 0;
+      broadcastStep();
       return true;
     } else {
       return false;
@@ -113,5 +115,23 @@ public class ServerTickRateManager extends TickRateManager {
   public void setTickRate(float f) {
     super.setTickRate(f);
     ((TickRateManagerAccess) this.server).onTickRateChanged();
+    broadcastState();
+  }
+
+  /**
+   * Sends the current tick state and step count to a player who just joined the server, analogous
+   * to vanilla 1.20.3+ {@code ServerTickRateManager.updateJoiningPlayer}.
+   */
+  public void updateJoiningPlayer(ServerPlayer player) {
+    Platform.TICK_STATE_BROADCASTER.sendState(player, this.tickrate, this.isFrozen);
+    Platform.TICK_STATE_BROADCASTER.sendStep(player, this.frozenTicksToRun);
+  }
+
+  private void broadcastState() {
+    Platform.TICK_STATE_BROADCASTER.broadcastState(this.server, this.tickrate, this.isFrozen);
+  }
+
+  private void broadcastStep() {
+    Platform.TICK_STATE_BROADCASTER.broadcastStep(this.server, this.frozenTicksToRun);
   }
 }

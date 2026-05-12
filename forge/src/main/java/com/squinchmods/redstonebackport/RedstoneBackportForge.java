@@ -6,6 +6,7 @@ import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.client.CrafterScreen;
 import com.squinchmods.redstonebackport.loot.WitchRedstoneModifier;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
+import com.squinchmods.redstonebackport.network.RedstoneBackportNetwork;
 import com.squinchmods.redstonebackport.tick.TickCommand;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -129,6 +130,9 @@ public class RedstoneBackportForge {
     MinecraftForge.EVENT_BUS.register(this);
     modEventBus.addListener(this::addCreative);
     MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+
+    RedstoneBackportNetwork.init();
+    Platform.TICK_STATE_BROADCASTER = new RedstoneBackportNetwork.Broadcaster();
   }
 
   private void registerCommands(RegisterCommandsEvent event) {

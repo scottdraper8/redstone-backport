@@ -23,7 +23,8 @@
     ]
   },
   "mixins": [
-    "redstone_backport.mixins.json"
+    "redstone_backport.mixins.json",
+    "redstone_backport.client.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.11",

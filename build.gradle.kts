@@ -36,6 +36,7 @@ allprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.errorprone {
             disableWarningsInGeneratedCode.set(true)
+            excludedPaths.set(".*/mixin/.*")
             option("NullAway:AnnotatedPackages", "com.squinchmods.redstonebackport")
             error("NullAway")
         }

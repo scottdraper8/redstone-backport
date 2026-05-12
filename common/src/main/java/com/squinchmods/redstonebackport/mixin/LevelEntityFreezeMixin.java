@@ -1,5 +1,7 @@
 package com.squinchmods.redstonebackport.mixin;
 
+import com.squinchmods.redstonebackport.tick.ClientTickRateAccess;
+import com.squinchmods.redstonebackport.tick.TickRateManager;
 import com.squinchmods.redstonebackport.tick.TickRateManagerAccess;
 import java.util.function.Consumer;
 import net.minecraft.server.level.ServerLevel;
@@ -18,15 +20,18 @@ public abstract class LevelEntityFreezeMixin {
   @Inject(method = "guardEntityTick", at = @At("HEAD"), cancellable = true)
   private <T extends Entity> void redstoneBackport$skipFrozenEntity(
       Consumer<T> ticker, T entity, CallbackInfo ci) {
-    if (!this.isClientSide) {
-      Level self = (Level) (Object) this;
-      if (self instanceof ServerLevel serverLevel) {
-        if (((TickRateManagerAccess) serverLevel.getServer())
-            .redstoneBackport$tickRateManager()
-            .isEntityFrozen(entity)) {
-          ci.cancel();
-        }
-      }
+    Level self = (Level) (Object) this;
+    TickRateManager manager = null;
+
+    if (!this.isClientSide && self instanceof ServerLevel serverLevel) {
+      manager =
+          ((TickRateManagerAccess) serverLevel.getServer()).redstoneBackport$tickRateManager();
+    } else if (this.isClientSide && self instanceof ClientTickRateAccess access) {
+      manager = access.redstoneBackport$clientTickRateManager();
+    }
+
+    if (manager != null && manager.isEntityFrozen(entity)) {
+      ci.cancel();
     }
   }
 }

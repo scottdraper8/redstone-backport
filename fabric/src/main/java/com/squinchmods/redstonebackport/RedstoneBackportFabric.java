@@ -4,11 +4,15 @@ import com.squinchmods.redstonebackport.block.CrafterBlock;
 import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
 import com.squinchmods.redstonebackport.tick.TickCommand;
+import com.squinchmods.redstonebackport.tick.TickingStatePayload;
+import com.squinchmods.redstonebackport.tick.TickingStepPayload;
+import io.netty.buffer.Unpooled;
 import javax.annotation.Nullable;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -44,6 +48,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 public class RedstoneBackportFabric implements ModInitializer {
+  private static final ResourceLocation TICK_STATE_ID = RedstoneBackport.id("tick_state");
+  private static final ResourceLocation TICK_STEP_ID = RedstoneBackport.id("tick_step");
+
   private void modifyLootTables() {
     LootTableEvents.MODIFY.register(
         (resourceManager, lootManager, id, tableBuilder, source) -> {
@@ -128,6 +135,38 @@ public class RedstoneBackportFabric implements ModInitializer {
             return insertIntoContainer(container, facing.getOpposite(), stack);
           }
           return stack;
+        };
+    Platform.TICK_STATE_BROADCASTER =
+        new Platform.TickStateBroadcaster() {
+          @Override
+          public void broadcastState(
+              net.minecraft.server.MinecraftServer server, float tickRate, boolean frozen) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+              sendState(player, tickRate, frozen);
+            }
+          }
+
+          @Override
+          public void broadcastStep(
+              net.minecraft.server.MinecraftServer server, int frozenTicksToRun) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+              sendStep(player, frozenTicksToRun);
+            }
+          }
+
+          @Override
+          public void sendState(ServerPlayer player, float tickRate, boolean frozen) {
+            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+            new TickingStatePayload(tickRate, frozen).write(buf);
+            ServerPlayNetworking.send(player, TICK_STATE_ID, buf);
+          }
+
+          @Override
+          public void sendStep(ServerPlayer player, int frozenTicksToRun) {
+            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+            new TickingStepPayload(frozenTicksToRun).write(buf);
+            ServerPlayNetworking.send(player, TICK_STEP_ID, buf);
+          }
         };
 
     ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS)

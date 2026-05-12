@@ -4,6 +4,8 @@ import com.squinchmods.redstonebackport.blockentity.CrafterBlockEntity;
 import com.squinchmods.redstonebackport.menu.CrafterMenu;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -54,4 +56,29 @@ public class Platform {
       ItemStack stack) {
     return ITEM_TRANSFER.insertToNeighbor(level, pos, state, stack);
   }
+
+  public interface TickStateBroadcaster {
+    void broadcastState(MinecraftServer server, float tickRate, boolean frozen);
+
+    void broadcastStep(MinecraftServer server, int frozenTicksToRun);
+
+    void sendState(ServerPlayer player, float tickRate, boolean frozen);
+
+    void sendStep(ServerPlayer player, int frozenTicksToRun);
+  }
+
+  public static TickStateBroadcaster TICK_STATE_BROADCASTER =
+      new TickStateBroadcaster() {
+        @Override
+        public void broadcastState(MinecraftServer server, float tickRate, boolean frozen) {}
+
+        @Override
+        public void broadcastStep(MinecraftServer server, int frozenTicksToRun) {}
+
+        @Override
+        public void sendState(ServerPlayer player, float tickRate, boolean frozen) {}
+
+        @Override
+        public void sendStep(ServerPlayer player, int frozenTicksToRun) {}
+      };
 }
