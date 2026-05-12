@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling==1.29.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "redstone-backport-docs"
+version = "0.0.0"
+description = "Sphinx documentation dependencies for Redstone Backport"
+requires-python = ">=3.10"
+# Exact pins limit surprise upgrades; after changing versions, run `uv lock` in the mod root.
+dependencies = [
+    "sphinx==8.1.3; python_full_version < '3.11'",
+    "sphinx==8.2.3; python_full_version >= '3.11'",
+    "furo==2025.12.19",
+    "myst-parser==4.0.1",
+    "sphinx-design==0.6.1; python_full_version < '3.11'",
+    "sphinx-design==0.7.0; python_full_version >= '3.11'",
+    "sphinx-copybutton==0.5.2",
+    "linkify-it-py==2.1.0",
+]
+
+[project.scripts]
+build-docs = "redstone_backport_docs.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["redstone_backport_docs"]
+
+[dependency-groups]
+# Duplicated at workspace root `pyproject.toml` so `uv sync` from the mod root installs dev tools.
+dev = [
+    "interrogate==1.7.0",
+    "mypy==2.1.0",
+    "ruff==0.15.12",
+    "vulture==2.16",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["redstone_backport_docs", "conf.py"]
+target-version = "py310"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "B",
+    "E4",
+    "E7",
+    "E9",
+    "F",
+    "I",
+    "SIM",
+    "UP",
+    "W",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"conf.py" = [
+    "A001",
+]
+
+[tool.mypy]
+explicit_package_bases = true
+packages = ["redstone_backport_docs"]
+python_version = "3.10"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "sphinx.*"
+ignore_missing_imports = true
+
+[tool.interrogate]
+color = true
+docstring_style = "sphinx"
+fail-under = 100
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = true
+ignore-private = true
+ignore-property-decorators = false
+ignore-semiprivate = true
+omit-covered-files = false
+verbose = 1

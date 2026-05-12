@@ -1,0 +1,62 @@
+/* Optional overrides for Furo (see html_theme_options in conf.py). */
+
+/*
+ * Sidebar Home: space above; horizontal inset matches Furo’s .sidebar-tree .reference padding
+ * (--sidebar-item-spacing-horizontal on the section links).
+ */
+.sidebar-home {
+  margin: 0;
+  padding: 0.85rem 0 0;
+}
+
+.sidebar-home__link {
+  display: block;
+  margin: 0;
+  padding: 0.3rem var(--sidebar-item-spacing-horizontal) 0.12rem
+    var(--sidebar-item-spacing-horizontal);
+  font-weight: 600;
+  line-height: var(--sidebar-item-line-height);
+  color: var(--color-sidebar-link-text--top-level);
+  text-decoration: none;
+  background-color: transparent;
+  border-radius: 0.2rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.sidebar-home__link:hover {
+  color: var(--color-brand-content);
+  background-color: var(--color-sidebar-item-background--hover);
+}
+
+.sidebar-home + .sidebar-tree {
+  margin-top: 0;
+}
+
+/*
+ * Furo sets .sidebar-tree .reference:hover { color: var(--color-sidebar-link-text) }, which hides
+ * accent/hover colors and breaks smooth transitions. Override for internal links and animate both
+ * color and background explicitly (Furo uses `background` on hover; we match with background-color).
+ */
+.sidebar-tree .reference.internal {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.sidebar-tree .reference.internal:hover {
+  color: var(--color-link--hover);
+  background-color: var(--color-sidebar-item-background--hover);
+}
+
+.sidebar-tree > ul > li.toctree-l1 > a.reference.internal:not(:hover) {
+  color: var(--color-brand-content);
+}
+
+/* Main article links: smooth color on hover (theme already swaps link / link--hover). */
+.content a.reference.internal,
+.content a.reference.external {
+  transition: color 0.2s ease;
+}
+
+table.align-top-table td,
+table.align-top-table th {
+  vertical-align: top;
+}
