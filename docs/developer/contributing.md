@@ -4,7 +4,7 @@
 
 This mod lives in the **squinchmods** monorepo:
 
-[https://github.com/squinchmods/squinchmods](https://github.com/squinchmods/squinchmods)
+[https://github.com/scottdraper8/squinchmods](https://github.com/scottdraper8/squinchmods)
 
 Use **issues and pull requests** there per project norms.
 

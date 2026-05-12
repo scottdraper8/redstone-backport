@@ -18,7 +18,7 @@ this mod is meant to absorb over time.
 :::
 
 **Repository:**
-[github.com/squinchmods/squinchmods](https://github.com/squinchmods/squinchmods)
+[github.com/scottdraper8/squinchmods](https://github.com/scottdraper8/squinchmods)
 
 (version-matrix)=
 
