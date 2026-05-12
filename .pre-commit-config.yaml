@@ -22,4 +22,4 @@ repos:
         entry: ./gradlew --no-daemon spotlessCheck compileJava compileTestJava
         language: system
         pass_filenames: false
-        types_or: [java, json, gradle, kotlin]
+        files: \.(java|json|gradle|kts|properties)$
