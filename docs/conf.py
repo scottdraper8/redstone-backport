@@ -78,7 +78,7 @@ html_sidebars = {
 
 html_theme = "furo"
 html_static_path = ["_static"]
-html_favicon = "icon.png"
+html_favicon = "_static/icon.png"
 html_css_files = ["css/custom.css"]
 html_js_files = ["js/custom.js"]
 html_title = f"{project} Documentation"
