@@ -10,8 +10,19 @@ base {
     archivesName.set("${project.property("mod_id")}-fabric")
 }
 
+loom {
+    mods {
+        create(project.property("mod_id") as String) {
+            sourceSet("main")
+        }
+    }
+}
+
 sourceSets {
     main {
+        java {
+            srcDir(project(":common").file("src/main/java"))
+        }
         resources {
             srcDir(project(":common").file("src/main/resources"))
         }
@@ -33,8 +44,6 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-loader:${project.property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
-
-    implementation(project(path = ":common", configuration = "namedElements"))
 }
 
 val expandProps = mapOf(

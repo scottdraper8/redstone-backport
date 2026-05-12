@@ -71,6 +71,15 @@ tasks {
         filesMatching(listOf("META-INF/mods.toml")) {
             expand(expandProps)
         }
+        filesMatching(listOf("*.mixins.json")) {
+            filter { line ->
+                if (line.contains("\"compatibilityLevel\": \"JAVA_17\"")) {
+                    line + "\n  \"refmap\": \"redstone_backport.refmap.json\","
+                } else {
+                    line
+                }
+            }
+        }
     }
     withType<Jar> {
         manifest {
