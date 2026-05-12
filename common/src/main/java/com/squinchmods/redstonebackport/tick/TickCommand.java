@@ -17,7 +17,7 @@ import net.minecraft.util.TimeUtil;
  * structure and feedback messages as the original.
  */
 public final class TickCommand {
-  private static final float MAX_TICKRATE = 10000.0F;
+  private static final float MAX_TICKRATE = TickRateManager.MAX_TICKRATE;
   private static final String DEFAULT_TICKRATE = String.valueOf(20);
 
   private TickCommand() {}

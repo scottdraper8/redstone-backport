@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
  */
 public class TickRateManager {
   public static final float MIN_TICKRATE = 1.0F;
+  public static final float MAX_TICKRATE = 1000.0F;
 
   protected float tickrate = 20.0F;
   protected long nanosecondsPerTick = TimeUtil.NANOSECONDS_PER_SECOND / 20L;
@@ -18,7 +19,7 @@ public class TickRateManager {
   protected boolean isFrozen = false;
 
   public void setTickRate(float f) {
-    this.tickrate = Math.max(f, MIN_TICKRATE);
+    this.tickrate = Math.min(Math.max(f, MIN_TICKRATE), MAX_TICKRATE);
     this.nanosecondsPerTick = (long) ((double) TimeUtil.NANOSECONDS_PER_SECOND / this.tickrate);
   }
 
