@@ -1,0 +1,30 @@
+schema: 1
+
+mod:
+  id: redstone-backport
+  display_name: Redstone Backport
+
+targets:
+  - id: forge-1.20.1
+    minecraft: "1.20.1"
+    loader: forge
+    loader_version: "47.4.0"
+    java: 17
+    supported: true
+    capabilities: [server, worldgen, command-script, gametest]
+
+  - id: fabric-1.20.1
+    minecraft: "1.20.1"
+    loader: fabric
+    loader_version: "0.15.11"
+    java: 17
+    supported: true
+    capabilities: [server, worldgen, command-script]
+
+  - id: quilt-1.20.1
+    minecraft: "1.20.1"
+    loader: quilt
+    loader_version: "0.26.0"
+    java: 17
+    supported: true
+    capabilities: [server, worldgen, command-script]
