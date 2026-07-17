@@ -154,7 +154,5 @@ tasks.withType<JavaCompile>().configureEach {
         disableWarningsInGeneratedCode.set(true)
         option("NullAway:AnnotatedPackages", "com.squinchmods.redstonebackport")
         error("NullAway")
-        // NeoForge's CI binary artifact path can expose duplicate synthetic parameter names.
-        disable("OverridingMethodInconsistentArgumentNamesChecker")
     }
 }
