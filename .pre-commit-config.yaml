@@ -1,11 +1,12 @@
 # Pre-commit for the Redstone Backport mod repository (submodule / standalone clone).
 # Install: pre-commit install  (from this directory)
 
+minimum_pre_commit_version: "4.6.2"
 default_install_hook_types: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # v6.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=102400"]
@@ -26,7 +27,7 @@ repos:
         files: \.py$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: 6fec9b7edb08fd9989088709d864a7826dc74e80 # v0.15.12
     hooks:
       - id: ruff-format
         files: ^docs/.*\.pyi?$
@@ -35,7 +36,7 @@ repos:
         args: [--fix]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: d2823d321df3af8f878f7ee3414dc94d037145b9 # v2.1.0
     hooks:
       - id: mypy
         name: mypy (docs package)
@@ -43,21 +44,21 @@ repos:
         files: ^docs/redstone_backport_docs/.*\.py$
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.25
+    rev: 4b2e70d08cb2ccd26d1fba73588de41c7a5d50b7 # v0.25
     hooks:
       - id: validate-pyproject
         files: .*pyproject\.toml$
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: 2ccb47ff45ad361a21071a7eedda4c37e6ae8c5a # v2.4.2
     hooks:
       - id: codespell
         files: ^docs/
         exclude: ^docs/(_build|\.venv)/
-        additional_dependencies: [tomli]
+        additional_dependencies: [tomli==2.5.0]
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.22.1
+    rev: 996abf60411a8d954288ac9856aae7602b80cbda # v0.22.1
     hooks:
       - id: markdownlint-cli2
         name: markdownlint-cli2 (docs)
@@ -73,6 +74,12 @@ repos:
 
   - repo: local
     hooks:
+      - id: dependency-policy
+        name: Dependency and workflow pin policy
+        language: system
+        entry: python3 -B scripts/check_dependency_policy.py
+        pass_filenames: false
+        always_run: true
       - id: vulture-docs-package
         name: vulture (docs package)
         language: python
@@ -89,6 +96,6 @@ repos:
         entry: interrogate -c docs/pyproject.toml docs/redstone_backport_docs
 
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.0
+    rev: 2ca41cc1372d1e939a6a879f18cdc19fc1cac1ce # v8.30.0
     hooks:
       - id: gitleaks
