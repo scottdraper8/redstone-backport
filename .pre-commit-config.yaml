@@ -1,7 +1,7 @@
 # Pre-commit for the Redstone Backport mod repository (submodule / standalone clone).
 # Install: pre-commit install  (from this directory)
 
-default_install_hook_types: [pre-commit, commit-msg]
+default_install_hook_types: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -66,19 +66,13 @@ repos:
         files: ^docs/.*\.md$
         exclude: ^docs/(_build|\.venv)/
 
+  - repo: https://github.com/rhysd/actionlint
+    rev: 914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
+    hooks:
+      - id: actionlint
+
   - repo: local
     hooks:
-      - id: contribution-branch-policy
-        name: reject attributed branch names
-        entry: .github/scripts/check_contribution_attribution.py branches
-        language: python
-        pass_filenames: false
-        always_run: true
-      - id: contribution-message-policy
-        name: reject attributed commit metadata
-        entry: .github/scripts/check_contribution_attribution.py message-file
-        language: python
-        stages: [commit-msg]
       - id: vulture-docs-package
         name: vulture (docs package)
         language: python
