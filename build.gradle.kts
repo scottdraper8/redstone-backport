@@ -20,6 +20,19 @@ allprojects {
         lockAllConfigurations()
     }
 
+    configurations.configureEach {
+        if (
+            name == "annotationProcessor" ||
+                name == "testAnnotationProcessor" ||
+                name.startsWith("spotless")
+        ) {
+            resolutionStrategy.force(
+                "com.google.guava:guava:33.7.2-jre",
+                "com.google.protobuf:protobuf-java:3.25.5",
+            )
+        }
+    }
+
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
             target("src/**/*.java")

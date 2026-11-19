@@ -78,6 +78,11 @@ jobs:
         uses: gradle/actions/dependency-submission@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
         with:
           dependency-graph: generate-and-upload
+          # Report executable build tooling owned by this repository. Minecraft,
+          # loader, and game-runtime libraries are supplied by the target game
+          # installation and cannot be patched or shipped by this mod.
+          dependency-graph-include-configurations: >-
+            ^(annotationProcessor|testAnnotationProcessor|errorprone|guavaForJavacBootclasspath|neoFormRuntimeExternalTools|spotless.*|classpath)$
 
   gradle-dependency-submission:
     name: Submit locked Gradle dependency graph
