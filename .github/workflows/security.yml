@@ -15,8 +15,12 @@ on:
       - "uv.lock"
   pull_request:
     paths:
+      - "**/*.gradle.kts"
       - ".github/dependabot.yml"
       - ".github/workflows/security.yml"
+      - "gradle.properties"
+      - "gradle.lockfile"
+      - "gradle/**"
       - "pyproject.toml"
       - "docs/pyproject.toml"
       - "uv.lock"
@@ -49,11 +53,8 @@ jobs:
       - name: Audit locked dependencies
         run: uv audit --locked --preview-features audit-command
 
-  gradle-dependency-submission:
-    name: Submit locked Gradle dependency graph
-    if: github.event_name != 'pull_request'
-    permissions:
-      contents: write
+  gradle-dependency-graph:
+    name: Generate locked Gradle dependency graph
     runs-on: ubuntu-latest
     steps:
       - name: Harden runner
@@ -69,7 +70,30 @@ jobs:
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: "17"
+          # Loom requires Java 21 to configure the build. The project modules
+          # still compile against their explicitly declared Java 17 toolchains.
+          java-version: "21"
 
-      - name: Generate and submit dependency graph
+      - name: Generate dependency graph
         uses: gradle/actions/dependency-submission@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
+        with:
+          dependency-graph: generate-and-upload
+
+  gradle-dependency-submission:
+    name: Submit locked Gradle dependency graph
+    if: github.event_name != 'pull_request'
+    needs: gradle-dependency-graph
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          disable-sudo: true
+          egress-policy: audit
+
+      - name: Submit dependency graph
+        uses: gradle/actions/dependency-submission@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
+        with:
+          dependency-graph: download-and-submit
