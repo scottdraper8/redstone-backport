@@ -3,7 +3,7 @@
 ## Requirements
 
 - **JDK 17**
-- **uv** and **Python 3.10+** for Sphinx docs — workspace root `pyproject.toml`, member
+- **uv** and **Python 3.11.5+** for Sphinx docs — workspace root `pyproject.toml`, member
   `docs/pyproject.toml` (shared `uv.lock` at the mod root)
 
 ## Gradle (mod JARs)
