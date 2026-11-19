@@ -121,7 +121,7 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.39.0")
     errorprone("com.uber.nullaway:nullaway:0.12.7")
 
-    add("guavaForJavacBootclasspath", "com.google.guava:guava:33.3.1-jre") {
+    add("guavaForJavacBootclasspath", "com.google.guava:guava:33.7.1-jre") {
         isTransitive = false
     }
     add("guavaForJavacBootclasspath", "com.google.guava:failureaccess:1.0.2") {
@@ -137,7 +137,7 @@ listOf(
     "testAnnotationProcessor",
     "testRuntimeClasspath",
 ).forEach { name ->
-    configurations.findByName(name)?.resolutionStrategy?.force("com.google.guava:guava:33.3.1-jre")
+    configurations.findByName(name)?.resolutionStrategy?.force("com.google.guava:guava:33.7.1-jre")
 }
 
 tasks.withType<JavaCompile>().configureEach {
