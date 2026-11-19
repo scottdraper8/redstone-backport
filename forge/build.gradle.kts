@@ -105,6 +105,13 @@ configurations {
     }
 }
 
+configurations.matching { it.name == "neoFormRuntimeExternalTools" }.configureEach {
+    resolutionStrategy.force(
+        "org.apache.commons:commons-compress:1.26.0",
+        "org.apache.commons:commons-lang3:3.18.0",
+    )
+}
+
 mixin {
     add(sourceSets.main.get(), "redstone_backport.refmap.json")
     config("redstone_backport.mixins.json")
@@ -121,10 +128,10 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.39.0")
     errorprone("com.uber.nullaway:nullaway:0.12.7")
 
-    add("guavaForJavacBootclasspath", "com.google.guava:guava:33.3.1-jre") {
+    add("guavaForJavacBootclasspath", "com.google.guava:guava:33.7.2-jre") {
         isTransitive = false
     }
-    add("guavaForJavacBootclasspath", "com.google.guava:failureaccess:1.0.2") {
+    add("guavaForJavacBootclasspath", "com.google.guava:failureaccess:1.0.3") {
         isTransitive = false
     }
 }
@@ -137,7 +144,7 @@ listOf(
     "testAnnotationProcessor",
     "testRuntimeClasspath",
 ).forEach { name ->
-    configurations.findByName(name)?.resolutionStrategy?.force("com.google.guava:guava:33.3.1-jre")
+    configurations.findByName(name)?.resolutionStrategy?.force("com.google.guava:guava:33.7.2-jre")
 }
 
 tasks.withType<JavaCompile>().configureEach {

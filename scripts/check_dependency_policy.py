@@ -17,6 +17,10 @@ PRECOMMIT_REFERENCE = re.compile(
 )
 EXACT_PYTHON = re.compile(r"^[A-Za-z0-9_.-]+(?:\[[A-Za-z0-9_.,-]+\])?==[^<>=!~*]+$")
 VERSION_VALUE = re.compile(r"[0-9][0-9A-Za-z.+-]*\Z")
+OWNED_GRADLE_CONFIGURATIONS = (
+    "^(annotationProcessor|testAnnotationProcessor|errorprone|"
+    "guavaForJavacBootclasspath|neoFormRuntimeExternalTools|spotless.*|classpath)$"
+)
 
 
 def check_python_manifests(failures: list[str]) -> None:
@@ -130,6 +134,14 @@ def check_automation(failures: list[str]) -> None:
     )
     if "uv sync --frozen" not in docs_workflow or 'version: "latest"' in docs_workflow:
         failures.append("Documentation CI must use the pinned uv tool and frozen lockfile")
+
+    security_workflow = (ROOT / ".github" / "workflows" / "security.yml").read_text(
+        encoding="utf-8"
+    )
+    if OWNED_GRADLE_CONFIGURATIONS not in security_workflow:
+        failures.append(
+            "Gradle dependency submission must cover repository-owned build tooling only"
+        )
 
 
 def main() -> int:
