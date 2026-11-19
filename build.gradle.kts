@@ -16,6 +16,10 @@ allprojects {
     apply(plugin = "com.diffplug.spotless")
     apply(plugin = "net.ltgt.errorprone")
 
+    dependencyLocking {
+        lockAllConfigurations()
+    }
+
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
             target("src/**/*.java")

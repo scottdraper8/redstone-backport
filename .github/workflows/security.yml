@@ -1,0 +1,75 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.gradle.kts"
+      - ".github/dependabot.yml"
+      - ".github/workflows/security.yml"
+      - "gradle.properties"
+      - "gradle.lockfile"
+      - "gradle/**"
+      - "pyproject.toml"
+      - "docs/pyproject.toml"
+      - "uv.lock"
+  pull_request:
+    paths:
+      - ".github/dependabot.yml"
+      - ".github/workflows/security.yml"
+      - "pyproject.toml"
+      - "docs/pyproject.toml"
+      - "uv.lock"
+  schedule:
+    - cron: "41 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-audit:
+    name: Audit locked Python dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          disable-sudo: true
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pinned uv
+        uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          version: "0.13.9"
+
+      - name: Audit locked dependencies
+        run: uv audit --locked --preview-features audit-command
+
+  gradle-dependency-submission:
+    name: Submit locked Gradle dependency graph
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          disable-sudo: true
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
